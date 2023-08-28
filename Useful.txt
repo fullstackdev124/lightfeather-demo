@@ -1,0 +1,292 @@
+1. Linux, Ubuntu Command
+- Install service, enable(boot), disable
+	sudo systemctl list-unit-files --type=service
+	/etc/systemd/system
+	sudo systemctl disable <service name>.service
+	sudo systemctl restart cps-backend.service
+
+sudo apt-get remove --auto-remove lighttpd
+sudo apt-get purge --auto-remove lighttpd
+
+ sudo systemctl restart jenkins
+ 
+chown -R root /path/of/your/project
+
+- Zip, Unzip
+	zip -r <zip file> <file or folder to compress>
+	tar -cvzf <zip file> <file or folder to compress>
+
+	unzip <zip file>
+	tar -xvzf <zip file>
+	
+- Restart PC
+	sudo shutdown -r now
+	sudo shutdown -r <minutes>
+	sudo systemctl reboot
+	sudo reboot
+	
+- LAMPP
+	sudo apt update
+	sudo apt install apache2
+	
+	sudo ufw allow in "Apache", sudo ufw allow in "Apache Full", sudo ufw allow in "Apache Secure"
+	sudo ufw allow 8989/tcp,	sudo ufw status verbose
+	 
+	sudo apt install mysql-server
+	sudo mysql > ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'rodolfotg@022';
+			   > UPDATE mysql.user SET HOST='%' WHERE User='root';
+			   > FLUSH PRIVILEGES;
+			   
+	sudo mysql_secure_installation
+	
+	sudo nano /etc/apache2/mods-enabled/dir.conf	->  #bind-address
+	sudo a2enmod rewrite // .htaccess
+
+- find public ip
+	ip addr show ens3 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//'
+	
+- Jenkins
+	wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add
+	sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+	sudo apt update
+	sudo apt install openjdk-11-jre
+	sudo apt update
+	sudo apt install jenkins
+	
+	sudo ufw allow 8080, sudo ufw allow OpenSSH, sudo ufw enable
+	
+	sudo vi /etc/default/jenkins
+	
+- CronJob
+	sudo crontab -e
+	sudo service cron restart
+
+2. MySQL
+- Connect mysql on docker image
+	docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container>
+	mysql -h <above result(ip)> -P 3306 --protocol=tcp -u <mysql user> -p
+
+- Backup, Restore
+	sudo mysqldump -u <user> -p <database> > <dump file>
+	sudo mysql <database> < <dump file>
+	sudo mysqldump --defaults-file=mysql.cnf machinery_db | gzip > mysqlbackup.gz
+	sudo mysqldump --no-data
+
+3. Docker
+docker build -t <image> .
+docker run -dp 3000:3000 <image>
+
+docker ps
+docker stop <the-container-id>
+docker rm -f <the-container-id>
+
+docker volume create todo-db
+docker run -dp 3000:3000 -v todo-db:/etc/todos getting-started
+
+docker network create todo-app
+PS> docker run -d `
+     --network todo-app --network-alias mysql `
+     -v todo-mysql-data:/var/lib/mysql `
+     -e MYSQL_ROOT_PASSWORD=secret `
+     -e MYSQL_DATABASE=todos `
+     mysql:5.7
+docker exec -it <mysql-container-id> mysql -u root -p	 
+
+docker run -it --network todo-app nicolaka/netshoot
+dig mysql
+
+PS> docker run -dp 3000:3000 `
+   -w /app -v "$(pwd):/app" `
+   --network todo-app `
+   -e MYSQL_HOST=mysql `
+   -e MYSQL_USER=root `
+   -e MYSQL_PASSWORD=secret `
+   -e MYSQL_DB=todos `
+   node:12-alpine `
+   sh -c "yarn install && yarn run dev"
+
+docker exec -it <container-id> mysql -u root -p
+
+docker compose up -d
+
+mvnw spring-boot:run -Dspring-boot.run.arguments=--server.port=9002
+   
+sudo docker rmi $(sudo docker images -a -q)   
+docker system prune
+   
+chown -hR user path   
+
+- Git
+git clone https://<user>:<token>@github.com/...
+git config --local credential.helper ""
+git remote set-url origin <new-url>
+
+- PIP
+pip freeze | findstr urllib
+pip freeze | findstr requests
+pip show <package>
+pip list
+pip freeze
+
+
+pip install --user pipenv
+py -m site --user-site
+setx PATh "%PATH%;... "
+
+   
+4. Miscellaneous
+- SSL
+	certbot
+
+- License, Cracked
+	https://soft.l-t.top/%E6%BF%80%E6%B4%BB%E5%B7%A5%E5%85%B7/JETBRAINS_INTELLIJ%E6%89%80%E6%9C%89%E4%BA%A7%E5%93%81%E9%80%9A%E7%94%A8%E6%BF%80%E6%B4%BB/
+
+- Test Card Number
+	http://support.worldpay.com/support/kb/bg/testandgolive/tgl5103.html
+	https://stripe.com/docs/testing
+	
+- Sample URL
+	https://cpsprod.tfnms.com
+	backend: spring boot, 	frontend: react
+
+	https://ecms-dev.dipvtel.com/
+	backend: node loopback,		frontend: angular
+
+	http://yourlocalcall.com
+	backend: spring, 	frontend: jquery & bootstrap
+
+	http://3.238.239.179,  http://160.16.236.201
+	backend: laravel, 	frontend: react
+
+	https://ksmgroup.jp/management_system/
+	backend: php, 	frontend: jquery & bootstrap
+	
+- Android Widget 
+	https://github.com/JStumpp/awesome-android
+	https://gitee.com/motley/awesome-android-ui	
+	https://github.com/wasabeef/awesome-android-ui
+	https://github.com/anastr/SpeedView
+
+
+
+- Jenkins
+sudo su    
+visudo -f /etc/sudoers
+add add following line at the end.
+
+jenkins ALL= NOPASSWD: ALL
+
+
+https://stackoverflow.com/questions/17940612/authentication-error-in-jenkins-on-using-sudo
+
+sudo chmod 777 -R *
+
+sudo chown -hR path
+
+https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04
+
+
+https://andela.com/insights/continuous-deploymentcd-using-bitbucket-pipelines-and-ubuntu-server/
+
+
+
+
+https://github.com/weyoss/redis-smq
+https://www.npmjs.com/package/angular-sse-client
+
+
+https://www.hostzealot.com/
+
+
+
+------------Git----------
+[user]
+	name = Li.Jett
+	email = l.jett@tfnms.com
+
+
+[user]
+	name = Dennis
+	email = fullstack_dev124@hotmail.com
+
+
+https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04
+https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-22-04
+
+- Remote Allow MySQL
+	 sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf  
+		bind-address	= 0.0.0.0
+		
+	ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'D1pv@o23!!';	
+		
+	CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'D1pv@o23!!';
+	CREATE USER 'root'@'%' IDENTIFIED BY 'D1pv@o23!!';
+	GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on *.* TO 'root'@'%' WITH GRANT OPTION;
+	FLUSH PRIVILEGES;
+	
+	alter USER 'root'@'%' IDENTIFIED BY 'D1pv@o23!!';
+	
+	sudo ufw allow 3306
+		
+	sudo systemctl restart mysql
+	
+	CREATE USER 'root'@'45.126.3.252' IDENTIFIED BY 'D1pv@o23!!';
+	GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on *.* TO 'root'@'45.126.3.252' WITH GRANT OPTION;
+	
+	ALTER USER 'root'@'%' IDENTIFIED BY 'rodolfotg@022';
+	GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on *.* TO 'root'@'%' WITH GRANT OPTION;
+	FLUSH PRIVILEGES;
+	
+	
+	GRANT ALL ON *.* to 'root'@'localhost' IDENTIFIED BY 'D1pv@o23!!';
+	GRANT ALL ON *.* to root@% IDENTIFIED BY 'D1pv@o23!!';
+
+
+- install node 16
+	sudo curl -s https://deb.nodesource.com/setup_16.x | sudo bash
+	sudo apt install nodejs -y
+
+	npm i -g pm2
+
+- setup service	
+	/etc/systemd/system/
+	
+	sudo systemctl daemon-reload
+
+- certbot
+	https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-20-04
+	
+innodb_buffer_pool_size=8G
+innodb_buffer_pool_instances=4
+innodb_buffer_pool_chunk_size=128M
+
+
+
+- hard disk usage
+	df -h
+	
+	
+--- 000-default-le-ssl.conf	
+	RewriteEngine on
+	RewriteRule ^/tfnr(.*) https://tmsdev.tfnms.com:3000/tfnr/async/response
+	
+	
+pm2 start --env production
+pm2 start --env developoment
+
+https://www.vultr.com/docs/install-apache-solr-on-ubuntu-20-04/
+https://searchendeca.blogspot.com/2018/12/core-creation-in-solr.html
+
+
+git reset --hard HEAD && git fetch --all && git pull
+git checkout develop
+git fetch --all && git reset --hard origin/develop
+git reset --hard HEAD && git fetch --all && git pull
+
+#	RewriteEngine on
+#	RewriteRule ^/api/v1/(.*) http://routemgr1.dipvtel.com:8082/api/v1/$1
+
+
+/root/.pm2/logs
+
+SET persist sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'
